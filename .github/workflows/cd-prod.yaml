@@ -2,8 +2,9 @@ name: Continuous Deployment
 
 on:
   workflow_dispatch:
-    branches:
-      - 'main'
+    push:
+      branches:
+        - 'main'
 
 env:
   KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
