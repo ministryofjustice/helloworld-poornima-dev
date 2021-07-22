@@ -3,10 +3,12 @@ name: Continuous Deployment
 on:
   workflow_dispatch:
     branches:
-      - 'main'
+      - '*'
 
 env:
+  KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
   KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
+  ECR_NAME: ${{ secrets.ECR_NAME }}
 
 jobs:
   main:
@@ -24,7 +26,7 @@ jobs:
           access-key-id: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
           region: eu-west-2
-          local-image: reference-app
+          local-image: helloworld-app
           image: ${{ secrets.ECR_NAME }}:${{ github.sha }}
       - name: Update image tag
         env:
@@ -33,12 +35,12 @@ jobs:
 
       - name: Authenticate to the cluster
         env:
-          KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
-          LIVE_API: ${{ secrets.LIVE_API }}
+          KUBE_CERT: ${{ secrets.KUBE_CERT }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
         run: |
-          echo "${{ secrets.KUBE_CERT }}" > ca.crt
+          echo "${KUBE_CERT}" > ca.crt
           kubectl config set-cluster ${KUBE_CLUSTER} --certificate-authority=./ca.crt --server=${LIVE_API}
-          kubectl config set-credentials deploy-user --token=${{ secrets.KUBE_TOKEN }}
+          kubectl config set-credentials deploy-user --token=${KUBE_TOKEN}
           kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${{ secrets.KUBE_NAMESPACE }}
           kubectl config get-contexts
           kubectl config use-context ${KUBE_CLUSTER}
