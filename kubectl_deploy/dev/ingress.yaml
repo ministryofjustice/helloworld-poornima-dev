@@ -10,18 +10,8 @@ spec:
   tls:
   - hosts:
     - poornima-demo-app.apps.live-1.cloud-platform.service.justice.gov.uk
-  - hosts:
-    - demo.dev-pk.service.justice.gov.uk
-    secretName: myruby-app-cert-secret
   rules:
   - host: poornima-demo-app.apps.live-1.cloud-platform.service.justice.gov.uk
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: rubyapp-service
-          servicePort: 4567
-  - host: demo.dev-pk.service.justice.gov.uk
     http:
       paths:
       - path: /
