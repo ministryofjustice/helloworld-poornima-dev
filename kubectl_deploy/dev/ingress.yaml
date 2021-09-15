@@ -4,8 +4,8 @@ metadata:
   name: helloworld-rubyapp-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
-#     external-dns.alpha.kubernetes.io/set-identifier: poornima-demo-live-1
-#     external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/set-identifier: poornima-demo-demo-blue
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
 spec:
   tls:
   - hosts:
